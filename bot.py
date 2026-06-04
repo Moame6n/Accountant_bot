@@ -1,3 +1,4 @@
+import os
 import asyncio
 import logging
 from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup
@@ -10,13 +11,25 @@ from telegram.ext import (
     ContextTypes
 )
 from telegram.error import TelegramError, BadRequest
-from config import TOKEN, CHANNEL_ID, AFFILIATE_LINK
 from tools import (
     calculate_vat,
     calculate_depreciation,
     calculate_gross_profit,
     calculate_break_even
 )
+
+# ===== قراءة المتغيرات من البيئة =====
+TOKEN = os.environ.get("BOT_TOKEN")
+CHANNEL_ID = os.environ.get("CHANNEL_ID")
+AFFILIATE_LINK = os.environ.get("AFFILIATE_LINK")
+
+# التحقق من وجود كل المتغيرات
+if not TOKEN:
+    raise ValueError("❌ BOT_TOKEN is missing! Add it in Railway Dashboard")
+if not CHANNEL_ID:
+    raise ValueError("❌ CHANNEL_ID is missing! Add it in Railway Dashboard")
+if not AFFILIATE_LINK:
+    raise ValueError("❌ AFFILIATE_LINK is missing! Add it in Railway Dashboard")
 
 # ===== إعداد السجل =====
 logging.basicConfig(
